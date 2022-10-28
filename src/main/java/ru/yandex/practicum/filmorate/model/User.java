@@ -1,22 +1,22 @@
 package ru.yandex.practicum.filmorate.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
-import lombok.NonNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
 @Data
 public class User {
-    @NonNull
     private Integer id;
-    @NonNull
+    @Email
     private String email;
-    @NonNull
+    @NotBlank
     private String login;
     private String name;
-    @JsonSerialize
-    @JsonDeserialize
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @PastOrPresent
     private LocalDate birthday;
 }

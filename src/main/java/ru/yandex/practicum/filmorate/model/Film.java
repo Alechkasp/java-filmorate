@@ -1,21 +1,22 @@
 package ru.yandex.practicum.filmorate.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
-import lombok.NonNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
 public class Film {
-    @NonNull
     private Integer id;
-    @NonNull
+    @NotBlank
     private String name;
+    @Size(min = 1, max = 200)
     private String description;
-    @JsonSerialize
-    @JsonDeserialize
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate releaseDate;
-    private long duration;
+    @Positive
+    private Integer duration;
 }
