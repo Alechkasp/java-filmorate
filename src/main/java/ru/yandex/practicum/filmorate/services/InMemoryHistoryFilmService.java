@@ -7,11 +7,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryHistoryFilmService implements FilmService {
-    private final HashMap<Integer, Film> films = new HashMap<>();
-    public static final LocalDate DATE_FIRST_RELEASE = LocalDate.of(1895, 12, 28);
-    int id = 0;
+    private final Map<Integer, Film> films = new HashMap<>();
+    private static final LocalDate DATE_FIRST_RELEASE = LocalDate.of(1895, 12, 28);
+    private int id = 0;
 
     @Override
     public Film addFilm(Film film) {
@@ -26,13 +27,14 @@ public class InMemoryHistoryFilmService implements FilmService {
     }
 
     @Override
-    public void updateFilm(Film film) {
+    public Film updateFilm(Film film) {
         if (films.containsKey(film.getId())) {
             film.setId(film.getId());
             films.put(film.getId(), film);
         } else {
             throw new ValidationException("Такого фильма нет");
         }
+        return film;
     }
 
     @Override

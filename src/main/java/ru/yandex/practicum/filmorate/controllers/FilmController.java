@@ -1,7 +1,13 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.filmorate.services.FilmService;
 import ru.yandex.practicum.filmorate.services.InMemoryHistoryFilmService;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -12,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    public InMemoryHistoryFilmService filmService = new InMemoryHistoryFilmService();
+    private final FilmService filmService = new InMemoryHistoryFilmService();
 
     @GetMapping
     public List<Film> findAll() {
@@ -25,19 +31,19 @@ public class FilmController {
     public Film create(@Valid @RequestBody Film film) {
         log.debug("Получен запрос POST /films.");
 
-        filmService.addFilm(film);
+        Film addedFilm = filmService.addFilm(film);
         log.debug("Фильм успешно создан!");
 
-        return film;
+        return addedFilm;
     }
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         log.debug("Получен запрос PUT /films.");
 
-        filmService.updateFilm(film);
+        Film updatedFilm = filmService.updateFilm(film);
         log.debug("Фильм успешно обновлен!");
 
-        return film;
+        return updatedFilm;
     }
 }

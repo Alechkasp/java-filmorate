@@ -6,14 +6,15 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryHistoryUserService implements UserService {
-    private final HashMap<Integer, User> users = new HashMap<>();
-    int id = 0;
+    private final Map<Integer, User> users = new HashMap<>();
+    private int id = 0;
 
     @Override
     public User addUser(User user) {
-        if ((user.getName() == null) || (user.getName().equals(""))) {
+        if ((user.getName() == null) || (user.getName().isBlank())) {
             user.setName(user.getLogin());
         }
         if (!user.getLogin().contains(" ")) {
@@ -23,18 +24,18 @@ public class InMemoryHistoryUserService implements UserService {
         } else {
             throw new ValidationException("Логин не может содержать пробелы");
         }
-
         return user;
     }
 
     @Override
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         if (users.containsKey(user.getId())) {
             user.setId(user.getId());
             users.put(user.getId(), user);
         } else {
             throw new ValidationException("Такого пользователя нет");
         }
+        return user;
     }
 
     @Override

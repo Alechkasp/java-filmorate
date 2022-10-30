@@ -7,7 +7,7 @@ import java.util.List;
 public interface FilmService {
     Film addFilm(Film film);
 
-    void updateFilm(Film film);
+    Film updateFilm(Film film);
 
     List<Film> getListFilms();
 }

@@ -6,12 +6,16 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.services.InMemoryHistoryFilmService;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import javax.validation.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import java.time.LocalDate;
 import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FilmTest {
     private InMemoryHistoryFilmService filmService;
