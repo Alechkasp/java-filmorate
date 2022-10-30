@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.managers.InMemoryHistoryUserManager;
+import ru.yandex.practicum.filmorate.services.InMemoryHistoryUserService;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
@@ -12,20 +12,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final InMemoryHistoryUserManager userManager = new InMemoryHistoryUserManager();
+    private final InMemoryHistoryUserService userService = new InMemoryHistoryUserService();
 
     @GetMapping
     public List<User> findAll() {
         log.debug("Получен запрос GET /users.");
 
-        return userManager.getListUsers();
+        return userService.getListUsers();
     }
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         log.debug("Получен запрос POST /users.");
 
-        userManager.addUser(user);
+        userService.addUser(user);
         log.debug("Пользователь успешно создан!");
 
         return user;
@@ -35,7 +35,7 @@ public class UserController {
     public User update(@Valid @RequestBody User user) {
         log.debug("Получен запрос PUT /users.");
 
-        userManager.updateUser(user);
+        userService.updateUser(user);
         log.debug("Пользователь успешно обновлен!");
 
         return user;

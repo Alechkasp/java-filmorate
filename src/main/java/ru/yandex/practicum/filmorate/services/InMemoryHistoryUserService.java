@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.managers;
+package ru.yandex.practicum.filmorate.services;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class InMemoryHistoryUserManager implements UserManager {
+public class InMemoryHistoryUserService implements UserService {
     private final HashMap<Integer, User> users = new HashMap<>();
     int id = 0;
 
@@ -16,9 +16,14 @@ public class InMemoryHistoryUserManager implements UserManager {
         if ((user.getName() == null) || (user.getName().equals(""))) {
             user.setName(user.getLogin());
         }
-        id++;
-        user.setId(id);
-        users.put(user.getId(), user);
+        if (!user.getLogin().contains(" ")) {
+            id++;
+            user.setId(id);
+            users.put(user.getId(), user);
+        } else {
+            throw new ValidationException("Логин не может содержать пробелы");
+        }
+
         return user;
     }
 
@@ -35,10 +40,5 @@ public class InMemoryHistoryUserManager implements UserManager {
     @Override
     public List<User> getListUsers() {
         return new ArrayList<>(users.values());
-    }
-
-    @Override
-    public HashMap<Integer, User> getTableUsers() {
-        return users;
     }
 }

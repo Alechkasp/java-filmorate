@@ -11,12 +11,16 @@ import java.time.LocalDate;
 @Data
 public class Film {
     private Integer id;
-    @NotBlank
+
+    @NotBlank(message = "Имя не может быть пустым")
     private String name;
+
     @Size(min = 1, max = 200)
     private String description;
+
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate releaseDate;
-    @Positive
+
+    @Positive(message = "Продолжительность фильма должна быть положительной")
     private Integer duration;
 }

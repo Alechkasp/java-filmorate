@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.managers;
+package ru.yandex.practicum.filmorate.services;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class InMemoryHistoryFilmManager implements  FilmManager {
+public class InMemoryHistoryFilmService implements FilmService {
     private final HashMap<Integer, Film> films = new HashMap<>();
     public static final LocalDate DATE_FIRST_RELEASE = LocalDate.of(1895, 12, 28);
     int id = 0;
@@ -38,10 +38,5 @@ public class InMemoryHistoryFilmManager implements  FilmManager {
     @Override
     public List<Film> getListFilms() {
         return new ArrayList<>(films.values());
-    }
-
-    @Override
-    public HashMap<Integer, Film> getTableFilms() {
-        return films;
     }
 }

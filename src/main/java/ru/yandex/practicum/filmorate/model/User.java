@@ -11,12 +11,17 @@ import java.time.LocalDate;
 @Data
 public class User {
     private Integer id;
-    @Email
+
+    @Email(message = "Email должен быть корректным адресом электронной почты")
+    @NotBlank(message = "Email не может быть пустым")
     private String email;
-    @NotBlank
+
+    @NotBlank(message = "Логин не может быть пустым")
     private String login;
+
     private String name;
+
     @DateTimeFormat(pattern = "yyyy-mm-dd")
-    @PastOrPresent
+    @PastOrPresent(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
 }

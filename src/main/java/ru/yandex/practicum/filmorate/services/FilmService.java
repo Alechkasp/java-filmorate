@@ -1,16 +1,13 @@
-package ru.yandex.practicum.filmorate.managers;
+package ru.yandex.practicum.filmorate.services;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.HashMap;
 import java.util.List;
 
-public interface FilmManager {
+public interface FilmService {
     Film addFilm(Film film);
 
     void updateFilm(Film film);
 
     List<Film> getListFilms();
-
-    HashMap<Integer, Film> getTableFilms();
 }
