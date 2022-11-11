@@ -1,5 +1,7 @@
-package ru.yandex.practicum.filmorate.services;
+package ru.yandex.practicum.filmorate.storage.film;
 
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -9,7 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryHistoryFilmService implements FilmService {
+@Component
+public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private static final LocalDate DATE_FIRST_RELEASE = LocalDate.of(1895, 12, 28);
     private int id = 0;
@@ -32,9 +35,29 @@ public class InMemoryHistoryFilmService implements FilmService {
             film.setId(film.getId());
             films.put(film.getId(), film);
         } else {
-            throw new ValidationException("Такого фильма нет");
+            throw new FilmNotFoundException("Такого фильма нет");
         }
         return film;
+    }
+
+    @Override
+    public Film deleteFilm(Film film) {
+        if (!films.containsKey(film.getId())) {
+            throw new FilmNotFoundException("Такого фильма нет");
+        } else {
+            Film removeFilm = films.get(film.getId());
+            films.remove(film.getId());
+            return removeFilm;
+        }
+    }
+
+    @Override
+    public Film getFilm(Integer id) {
+        if (films.containsKey(id)) {
+            return films.get(id);
+        } else {
+            throw new FilmNotFoundException("Такого фильма нет");
+        }
     }
 
     @Override

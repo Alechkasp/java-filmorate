@@ -1,5 +1,7 @@
-package ru.yandex.practicum.filmorate.services;
+package ru.yandex.practicum.filmorate.storage.user;
 
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -8,7 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryHistoryUserService implements UserService {
+@Component
+public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
     private int id = 0;
 
@@ -33,9 +36,29 @@ public class InMemoryHistoryUserService implements UserService {
             user.setId(user.getId());
             users.put(user.getId(), user);
         } else {
-            throw new ValidationException("Такого пользователя нет");
+            throw new UserNotFoundException("Такого пользователя нет");
         }
         return user;
+    }
+
+    @Override
+    public User deleteUser(User user) {
+        if (!users.containsKey(user.getId())) {
+            throw new UserNotFoundException("Такого пользователя нет");
+        } else {
+            User remoteUser = users.get(user.getId());
+            users.remove(user.getId());
+            return remoteUser;
+        }
+    }
+
+    @Override
+    public User getUser(Integer id) {
+        if (!users.containsKey(id)) {
+            throw new UserNotFoundException("Такого пользователя нет");
+        } else {
+            return users.get(id);
+        }
     }
 
     @Override
