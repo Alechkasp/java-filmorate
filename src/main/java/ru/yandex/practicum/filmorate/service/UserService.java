@@ -6,8 +6,8 @@ import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -91,23 +91,17 @@ public class UserService implements UserServiceInterface {
             throw new UserNotFoundException("Такого пользователя нет");
         }
 
-        List<User> commonFriends = new ArrayList<>();
-        for (Integer i : user.getFriendsId()) {
-            if (otherUser.getFriendsId().contains(i)) {
-                commonFriends.add(userStorage.getUser(i));
-            }
-        }
-        return commonFriends;
-
+        return user.getFriendsId()
+                .stream()
+                .filter(otherUser.getFriendsId()::contains)
+                .map(userStorage::getUser)
+                .collect(Collectors.toList());
     }
 
     public List<User> getAllFriends(Integer userId) {
-        List<User> users = new ArrayList<>();
-        for (User u : userStorage.getListUsers()) {
-            if (userStorage.getUser(userId).getFriendsId().contains(u.getId())) {
-                users.add(u);
-            }
-        }
-        return users;
+        return userStorage.getUser(userId).getFriendsId()
+                .stream()
+                .map(this::getUser)
+                .collect(Collectors.toList());
     }
 }
