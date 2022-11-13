@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.services.InMemoryHistoryFilmService;
+import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.ConstraintViolation;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FilmTest {
-    private InMemoryHistoryFilmService filmService;
+    private InMemoryFilmStorage filmService;
     private Film film;
     private Validator validator;
 
@@ -27,7 +27,7 @@ public class FilmTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
 
-        filmService = new InMemoryHistoryFilmService();
+        filmService = new InMemoryFilmStorage();
         film = new Film();
 
         film.setId(1);
