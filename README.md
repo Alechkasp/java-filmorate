@@ -1,7 +1,7 @@
 # java-filmorate
 
 **Схема базы данных представлена на рисунке** :sauropod:
-![This is an image](https://user-images.githubusercontent.com/32979737/204549386-d1d2b7cc-67cd-43b3-a507-a82ccc1d38e5.png)
+![This is an image](https://user-images.githubusercontent.com/32979737/204552408-f148eb70-f1c9-4675-999f-c70636035325.png)
 
 ## Примеры запросов для Film:
 
