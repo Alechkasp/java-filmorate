@@ -1,9 +1,10 @@
 # java-filmorate
 
 **Схема базы данных представлена на рисунке** :sauropod:
-![This is an image](https://user-images.githubusercontent.com/32979737/204534723-74327efd-1b52-4498-a379-fe2bb5a53a8f.png)
+![This is an image](https://user-images.githubusercontent.com/32979737/204549386-d1d2b7cc-67cd-43b3-a507-a82ccc1d38e5.png)
 
 ## Примеры запросов для Film:
+
 :large_blue_circle: **GET** 
 
 /films - получить список всех фильмов
