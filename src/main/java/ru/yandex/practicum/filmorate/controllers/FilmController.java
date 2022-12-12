@@ -3,20 +3,22 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.filmorate.exception.FieldValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmServiceInterface;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -24,10 +26,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final FilmServiceInterface filmService;
+    private final FilmService filmService;
 
     @GetMapping
-    public List<Film> findAll() {
+    public List<Film> getAllFilms() {
         log.debug("Получен запрос GET /films.");
 
         return filmService.getListFilms();
@@ -52,48 +54,51 @@ public class FilmController {
 
         Film addedFilm = filmService.addFilm(film);
         log.debug("Фильм успешно создан!");
-
+        //validateFilmReleaseDate(film.getReleaseDate());
+        //return filmService.addFilm(film);
         return addedFilm;
     }
 
     @PutMapping
-    public Film update(@Valid @RequestBody Film film) {
+    public Film updateFilm(@Valid @RequestBody Film film) {
         log.debug("Получен запрос PUT /films.");
 
+/*        validateFilmReleaseDate(film.getReleaseDate());
+        return filmService.updateFilm(film);*/
         Film updatedFilm = filmService.updateFilm(film);
         log.debug("Фильм успешно обновлен!");
 
         return updatedFilm;
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}/like/{userId}")
-    public Film addLike(@PathVariable Integer id, @PathVariable Integer userId) {
+    public void addLike(@PathVariable Integer id, @PathVariable Integer userId) {
         log.debug("Получен запрос PUT /films/{id}/like/{userId}");
 
-        Film film = filmService.addLike(id, userId);
+        filmService.addLike(id, userId);
 
         log.debug("Лайк поставлен!");
-
-        return film;
     }
 
-    @DeleteMapping
-    public Film delete(@Valid @RequestBody Film film) {
-        log.debug("Получен запрос DELETE /films.");
+    @DeleteMapping("/{id}")
+    public Film deleteFilm(@PathVariable Integer id) {
+        log.debug("Получен запрос DELETE /films/{id}");
 
-        Film removeFilm = filmService.deleteFilm(film);
-        log.debug("Фильм успешно удален!");
-
-        return removeFilm;
+        return filmService.deleteFilm(id);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}/like/{userId}")
-    public Film delLike(@PathVariable Integer id, @PathVariable Integer userId) {
+    public void delLike(@PathVariable Integer id, @PathVariable Integer userId) {
         log.debug("Получен запрос DELETE /films/{id}/like/{userId}");
 
-        Film film = filmService.delLike(id, userId);
-        log.debug("Лайк удален!");
-
-        return film;
+        filmService.delLike(id, userId);
     }
+
+/*    private void validateFilmReleaseDate(LocalDate date) {
+        if (date.isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new FieldValidationException("releaseDate", "Release date must not be before 1895-12-28");
+        }
+    }*/
 }

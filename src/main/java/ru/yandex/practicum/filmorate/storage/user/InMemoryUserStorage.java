@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Component("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
     private int id = 0;
@@ -31,10 +31,10 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User updateUser(User user) {
-        if (users.containsKey(user.getId())) {
-            user.setId(user.getId());
-            users.put(user.getId(), user);
+    public User updateUser(Integer id, User user) {
+        if (users.containsKey(id)) {
+            user.setId(id);
+            users.put(id, user);
         } else {
             throw new UserNotFoundException("Такого пользователя нет");
         }
@@ -42,12 +42,12 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User deleteUser(User user) {
-        if (!users.containsKey(user.getId())) {
+    public User delUser(Integer id) {
+        if (!users.containsKey(id)) {
             throw new UserNotFoundException("Такого пользователя нет");
         } else {
-            User remoteUser = users.get(user.getId());
-            users.remove(user.getId());
+            User remoteUser = users.get(id);
+            users.remove(id);
             return remoteUser;
         }
     }
@@ -64,5 +64,30 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<User> getListUsers() {
         return new ArrayList<>(users.values());
+    }
+
+    @Override
+    public void addFriend(Integer userId, Integer friendId) {
+
+    }
+
+    @Override
+    public void delFriend(Integer userId, Integer friendId) {
+
+    }
+
+    @Override
+    public List<User> getAllFriends(Integer id) {
+        return null;
+    }
+
+    @Override
+    public List<User> getCommonFriends(Integer userId, Integer otherUserId) {
+        return null;
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return null;
     }
 }

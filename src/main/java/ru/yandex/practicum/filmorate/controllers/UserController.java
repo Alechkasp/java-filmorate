@@ -3,33 +3,33 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserServiceInterface;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    private final UserServiceInterface userService;
+    private final UserService userService;
 
     @GetMapping
-    public List<User> findAll() {
+    public List<User> getAllUsers() {
         log.debug("Получен запрос GET /users.");
 
-        return userService.getListUsers();
+        return userService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -40,10 +40,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends")
-    public List<User> getAllFriends(@PathVariable Integer id) {
+    public List<User> getFriends(@PathVariable Integer id) {
         log.debug("Получен запрос GET /users/{id}/friends");
 
-        return userService.getAllFriends(id);
+        return userService.getFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
@@ -55,52 +55,39 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@Valid @RequestBody User user) {
+    public User createUser(@Valid @RequestBody User user) {
         log.debug("Получен запрос POST /users.");
 
-        User addedUser = userService.addUser(user);
-        log.debug("Пользователь успешно создан!");
-
-        return addedUser;
+        return userService.addUser(user);
     }
 
     @PutMapping
-    public User update(@Valid @RequestBody User user) {
+    public User updateUser(@Valid @RequestBody User user) {
         log.debug("Получен запрос PUT /users.");
 
-        User updatedUser = userService.updateUser(user);
-        log.debug("Пользователь успешно обновлен!");
-
-        return updatedUser;
+        return userService.updateUser(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+    public void addFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.debug("Получен запрос PUT /users/{id}/friends/{friendId}");
 
-        User user = userService.addFriend(id, friendId);
-        log.debug("Друг добавлен!");
-
-        return user;
+        userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping
-    public User deleteUser(@Valid @RequestBody User user) {
+    @DeleteMapping("/{id}")
+    public User delUser(@PathVariable Integer id) {
         log.debug("Получен запрос DELETE /users.");
 
-        User removeUser = userService.deleteUser(user);
-        log.debug("Пользователь успешно удален!");
-
-        return removeUser;
+        return userService.delUser(id);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User delFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
-        log.debug("Получен запрос DELETE /users/{id}/friends/{friendId}");
-
-        User delFriend = userService.delFriend(id, friendId);
-        log.debug("Друг успешно удален!");
-
-        return delFriend;
+    public void delFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
+        userService.delFriend(id, friendId);
     }
+
+
+
+
 }
