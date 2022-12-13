@@ -12,12 +12,12 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class DbMpaStorage implements MpaStorage {
+public class MpaDbStorage implements MpaStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Mpa> getAll() {
-        String sql = "select * from MPA order_by MPA_ID";
+        String sql = "select * from MPA order by MPA_ID";
         try {
             return jdbcTemplate.query(sql, this::mapRowToRate);
         } catch (DataAccessException exception) {
@@ -35,7 +35,7 @@ public class DbMpaStorage implements MpaStorage {
         }
     }
 
-    private Mpa mapRowToRate(ResultSet resultSet, int rowNum) throws SQLException {
+    private Mpa mapRowToRate(ResultSet resultSet, Integer rowNum) throws SQLException {
         return new Mpa(resultSet.getInt("mpa_id"), resultSet.getString("mpa_name"));
     }
 }

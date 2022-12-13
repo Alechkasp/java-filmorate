@@ -17,7 +17,7 @@ public class MpaController {
     private final MpaService mpaService;
 
     @GetMapping
-    public List<Mpa> getAllMpas() {
+    public List<Mpa> getAllMpa() {
         return mpaService.getAll();
     }
 

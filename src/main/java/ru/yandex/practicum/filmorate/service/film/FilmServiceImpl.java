@@ -24,8 +24,8 @@ public class FilmServiceImpl implements FilmService {
     private final GenreStorage genreStorage;
 
     public FilmServiceImpl(
-            @Qualifier("dbFilmStorage") FilmStorage filmStorage,
-            @Qualifier("dbUserStorage") UserStorage userStorage,
+            @Qualifier("FilmDbStorage") FilmStorage filmStorage,
+            @Qualifier("UserDbStorage") UserStorage userStorage,
             MpaStorage mpaStorage,
             GenreStorage genreStorage
     ) {

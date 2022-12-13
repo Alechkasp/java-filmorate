@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Repository("dbFilmStorage")
+@Repository("FilmDbStorage")
 @RequiredArgsConstructor
-public class DbFilmStorage implements FilmStorage {
+public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     private final GenreStorage genreStorage;
 
@@ -112,7 +112,7 @@ public class DbFilmStorage implements FilmStorage {
                 resultSet.getString("description"),
                 resultSet.getDate("release_date").toLocalDate(),
                 resultSet.getInt("duration"),
-                new Mpa(resultSet.getInt("mpa.mpa_id"), resultSet.getString("mpa.mpa_name")),
+                new Mpa(resultSet.getInt("mpa_id"), resultSet.getString("mpa_name")),
                 genreStorage.getAllByFilmId(resultSet.getInt("film_id"))
         );
     }

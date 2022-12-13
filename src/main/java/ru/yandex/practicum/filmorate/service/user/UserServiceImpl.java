@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service.user;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.FieldValidationException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -14,7 +13,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
 
-    public UserServiceImpl(@Qualifier("dbUserStorage") UserStorage userStorage) {
+    public UserServiceImpl(@Qualifier("UserDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -36,10 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User newUser) {
-/*        if (emailIsBusy(newUser.getEmail())) {
-            throw new FieldValidationException("email", "User with this email is already exists");
-        }*/
-
         checkUserName(newUser);
 
         return userStorage.addUser(newUser);
@@ -50,10 +45,6 @@ public class UserServiceImpl implements UserService {
         if (userStorage.getUser(user.getId()) == null) {
             throw new UserNotFoundException("Такого пользователя нет");
         }
-
-/*        if (emailIsBusy(user.getEmail())) {
-            throw new FieldValidationException("email", "User with this email is already exists");
-        }*/
 
         checkUserName(user);
 
@@ -134,16 +125,9 @@ public class UserServiceImpl implements UserService {
         return userStorage.getCommonFriends(userId, otherUserId);
     }
 
-    private boolean emailIsBusy(String email) {
-        return userStorage.getByEmail(email) != null;
-    }
-
     private void checkUserName(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
     }
-
-
-
 }

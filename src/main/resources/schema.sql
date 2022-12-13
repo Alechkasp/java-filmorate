@@ -61,8 +61,8 @@ create table if not exists FRIENDSHIP
 
 create table if not exists LIKES
 (
-    USER_ID INTEGER not null,
     FILM_ID INTEGER not null,
+    USER_ID INTEGER not null,
     constraint LIKES_FILMS_FILM_ID_FK
         foreign key (FILM_ID) references FILMS,
     constraint LIKES_USERS_USER_ID_FK

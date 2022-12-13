@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import ru.yandex.practicum.filmorate.exception.FieldValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -52,23 +52,20 @@ public class FilmController {
     public Film create(@Valid @RequestBody Film film) {
         log.debug("Получен запрос POST /films.");
 
-        Film addedFilm = filmService.addFilm(film);
+        validateFilmReleaseDate(film.getReleaseDate());
+
         log.debug("Фильм успешно создан!");
-        //validateFilmReleaseDate(film.getReleaseDate());
-        //return filmService.addFilm(film);
-        return addedFilm;
+        return filmService.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
         log.debug("Получен запрос PUT /films.");
 
-/*        validateFilmReleaseDate(film.getReleaseDate());
-        return filmService.updateFilm(film);*/
-        Film updatedFilm = filmService.updateFilm(film);
-        log.debug("Фильм успешно обновлен!");
+        validateFilmReleaseDate(film.getReleaseDate());
 
-        return updatedFilm;
+        log.debug("Фильм успешно обновлен!");
+        return filmService.updateFilm(film);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -96,9 +93,9 @@ public class FilmController {
         filmService.delLike(id, userId);
     }
 
-/*    private void validateFilmReleaseDate(LocalDate date) {
+    private void validateFilmReleaseDate(LocalDate date) {
         if (date.isBefore(LocalDate.of(1895, 12, 28))) {
-            throw new FieldValidationException("releaseDate", "Release date must not be before 1895-12-28");
+            throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }
-    }*/
+    }
 }

@@ -86,8 +86,4 @@ public class UserController {
     public void delFriend(@PathVariable Integer id, @PathVariable Integer friendId) {
         userService.delFriend(id, friendId);
     }
-
-
-
-
 }

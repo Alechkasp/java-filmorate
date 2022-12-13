@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository("dbUserStorage")
+@Repository("UserDbStorage")
 @RequiredArgsConstructor
-public class DbUserStorage implements UserStorage {
+public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
