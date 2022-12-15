@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -13,6 +15,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -29,9 +33,11 @@ public class FilmTest {
         validator = factory.getValidator();
 
         filmStorage = new InMemoryFilmStorage();
+        List<Genre> genres = new ArrayList<>();
 
         film = new Film(1, "New film", "Description",
-                LocalDate.of(2021, 12, 16), 15);
+                LocalDate.of(2021, 12, 16), 15,
+                new Mpa(1, "G"), genres);
 
         film.setId(1);
         film.setName("Spider-Man: No Way Home");

@@ -5,25 +5,27 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-@Sql(statements = "delete from GENRE")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class GenreStorageTest {
     private final GenreStorage genreStorage;
 
     @Test
-    void shouldReturnEmptyList() {
-        assertThat(genreStorage.getAll()).isEmpty();
+    void shouldReturnSizeList() {
+
+        assertThat(genreStorage.getAll()).hasSize(6);
     }
 
     @Test
-    void shouldReturnNull_IfMpaIsNotExists() {
-        assertThat(genreStorage.getGenreId(1)).isNull();
+    void shouldReturnFirstGenre() {
+        Genre genre = new Genre(1, "Комедия");
+
+        assertThat(genreStorage.getGenreId(1)).isEqualTo(genre);
     }
 }
