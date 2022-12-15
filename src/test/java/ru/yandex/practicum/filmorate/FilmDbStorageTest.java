@@ -13,7 +13,7 @@ import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 import java.time.LocalDate;
 import java.util.Collections;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase

@@ -17,8 +17,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -52,8 +50,6 @@ public class FilmController {
     public Film create(@Valid @RequestBody Film film) {
         log.debug("Получен запрос POST /films.");
 
-        validateFilmReleaseDate(film.getReleaseDate());
-
         log.debug("Фильм успешно создан!");
         return filmService.addFilm(film);
     }
@@ -61,8 +57,6 @@ public class FilmController {
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
         log.debug("Получен запрос PUT /films.");
-
-        validateFilmReleaseDate(film.getReleaseDate());
 
         log.debug("Фильм успешно обновлен!");
         return filmService.updateFilm(film);
@@ -91,11 +85,5 @@ public class FilmController {
         log.debug("Получен запрос DELETE /films/{id}/like/{userId}");
 
         filmService.delLike(id, userId);
-    }
-
-    private void validateFilmReleaseDate(LocalDate date) {
-        if (date.isBefore(LocalDate.of(1895, 12, 28))) {
-            throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
-        }
     }
 }

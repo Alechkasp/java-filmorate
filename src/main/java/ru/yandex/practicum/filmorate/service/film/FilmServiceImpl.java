@@ -14,6 +14,8 @@ import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import javax.validation.ValidationException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -51,6 +53,8 @@ public class FilmServiceImpl implements FilmService {
             });
         }
 
+        validateFilmReleaseDate(newFilm.getReleaseDate());
+
         return filmStorage.addFilm(newFilm);
     }
 
@@ -71,6 +75,8 @@ public class FilmServiceImpl implements FilmService {
                 }
             });
         }
+
+        validateFilmReleaseDate(film.getReleaseDate());
 
         return filmStorage.updateFilm(film.getId(), film);
     }
@@ -137,5 +143,11 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public List<Film> getPopularFilms(Integer count) {
         return filmStorage.getPopularFilms(count);
+    }
+
+    private void validateFilmReleaseDate(LocalDate date) {
+        if (date.isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
+        }
     }
 }
