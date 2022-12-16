@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Component("InMemoryFilmStorage")
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private static final LocalDate DATE_FIRST_RELEASE = LocalDate.of(1895, 12, 28);
@@ -30,10 +30,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film updateFilm(Film film) {
-        if (films.containsKey(film.getId())) {
-            film.setId(film.getId());
-            films.put(film.getId(), film);
+    public Film updateFilm(Integer id, Film film) {
+        if (films.containsKey(id)) {
+            film.setId(id);
+            films.put(id, film);
         } else {
             throw new FilmNotFoundException("Такого фильма нет");
         }
@@ -41,12 +41,12 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film deleteFilm(Film film) {
-        if (!films.containsKey(film.getId())) {
+    public Film deleteFilm(Integer id) {
+        if (!films.containsKey(id)) {
             throw new FilmNotFoundException("Такого фильма нет");
         } else {
-            Film removeFilm = films.get(film.getId());
-            films.remove(film.getId());
+            Film removeFilm = films.get(id);
+            films.remove(id);
             return removeFilm;
         }
     }
@@ -63,5 +63,20 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public List<Film> getListFilms() {
         return new ArrayList<>(films.values());
+    }
+
+    @Override
+    public List<Film> getPopularFilms(Integer count) {
+        return null;
+    }
+
+    @Override
+    public void addLike(Integer filmId, Integer userId) {
+
+    }
+
+    @Override
+    public void delLike(Integer filmId, Integer userId) {
+
     }
 }

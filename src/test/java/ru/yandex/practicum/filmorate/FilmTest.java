@@ -3,6 +3,9 @@ package ru.yandex.practicum.filmorate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -12,13 +15,15 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FilmTest {
-    private InMemoryFilmStorage filmService;
+    private FilmStorage filmStorage;
     private Film film;
     private Validator validator;
 
@@ -27,8 +32,12 @@ public class FilmTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
 
-        filmService = new InMemoryFilmStorage();
-        film = new Film();
+        filmStorage = new InMemoryFilmStorage();
+        List<Genre> genres = new ArrayList<>();
+
+        film = new Film(1, "New film", "Description",
+                LocalDate.of(2021, 12, 16), 15,
+                new Mpa(1, "G"), genres);
 
         film.setId(1);
         film.setName("Spider-Man: No Way Home");
@@ -67,7 +76,7 @@ public class FilmTest {
     void releaseDateIsBefore28December1895() {
         film.setReleaseDate(LocalDate.of(1894, 12,28));
 
-        assertThrows(ValidationException.class, () -> filmService.addFilm(film));
+        assertThrows(ValidationException.class, () -> filmStorage.addFilm(film));
     }
 
     @Test

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -18,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserTest {
-    private InMemoryUserStorage userService;
+    //private InMemoryUserStorage userService;
+    private UserStorage userStorage;
     private User user;
     private Validator validator;
 
@@ -27,8 +29,9 @@ public class UserTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
 
-        userService = new InMemoryUserStorage();
-        user = new User();
+        userStorage = new InMemoryUserStorage();
+        user = new User(1, "aaa.bbb@yandex.ru", "aaaa", "bbb",
+                LocalDate.of(1995, 11, 23));
 
         user.setId(1);
         user.setEmail("peter.petrov@yandex.ru");
@@ -81,7 +84,7 @@ public class UserTest {
     void loginWithBlank() {
         user.setLogin("Nick Name");
 
-        assertThrows(ValidationException.class, () -> userService.addUser(user));
+        assertThrows(ValidationException.class, () -> userStorage.addUser(user));
     }
 
     @Test
